@@ -1,4 +1,4 @@
-# Internship Frontend Tasks
+# Blog App Frontend Tasks
 
 This repository contains the frontend tasks I completed during my internship, built using HTML and CSS.
 
