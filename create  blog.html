@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Blog - BlogSpace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --maroon: #7a1f4b;
+        --maroon-dark: #5c1739;
+        --rose: #f3d9e4;
+        --cream: #fbf6f2;
+        --ink: #2b2230;
+        --gold: #c9a24b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background:
+            linear-gradient(rgba(251,246,242,0.90), rgba(251,246,242,0.94)),
+            url("https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=60") center/cover fixed,
+            var(--cream);
+        color: var(--ink);
+        margin: 0;
+        min-height: 100vh;
+    }
+
+    .navbar {
+        background: linear-gradient(90deg, var(--maroon-dark), var(--maroon));
+        padding: 16px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .navbar h2 {
+        font-family: 'Playfair Display', serif;
+        color: white;
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    .navbar .nav-links a {
+        color: #f7e7ef;
+        text-decoration: none;
+        margin-left: 22px;
+        font-size: 14px;
+        font-weight: 500;
+        padding-bottom: 3px;
+        border-bottom: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+    .navbar .nav-links a:hover {
+        border-bottom-color: var(--gold);
+        color: white;
+    }
+
+    .form-box {
+        background-color: white;
+        max-width: 660px;
+        margin: 45px auto;
+        padding: 0 0 30px 0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(122,31,75,0.18);
+    }
+
+    .form-header {
+        padding: 38px 30px;
+        text-align: center;
+        color: white;
+        background:
+            linear-gradient(rgba(60,10,35,0.72), rgba(60,10,35,0.72)),
+            url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=70") center/cover,
+            var(--maroon-dark);
+    }
+
+    .form-header h2 {
+        font-family: 'Playfair Display', serif;
+        margin: 0 0 6px 0;
+        font-size: 30px;
+    }
+
+    .form-header p {
+        margin: 0;
+        font-weight: 300;
+        font-size: 14px;
+        color: #f7e7ef;
+    }
+
+    form { padding: 10px 30px 0 30px; }
+
+    label {
+        display: block;
+        margin-top: 18px;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--maroon);
+    }
+
+    input[type="text"], select, textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid #e6d5de;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        background-color: #fdfbfc;
+        transition: 0.3s;
+    }
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--maroon);
+        box-shadow: 0 0 0 3px rgba(122,31,75,0.12);
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 170px;
+        line-height: 1.6;
+    }
+
+    .error {
+        color: #d92b2b;
+        font-size: 12px;
+        margin: 5px 0 0 0;
+        display: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 13px;
+        margin-top: 24px;
+        background: linear-gradient(90deg, var(--maroon), var(--maroon-dark));
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(122,31,75,0.35);
+    }
+
+    .success {
+        color: #228b22;
+        background: #e0f3e0;
+        text-align: center;
+        display: none;
+        margin: 15px 30px 0 30px;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+        .navbar { flex-direction: column; }
+        .navbar .nav-links { margin-top: 10px; }
+        .form-box { margin: 25px 12px; }
+        form { padding: 10px 18px 0 18px; }
+    }
+</style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>✍ BlogSpace</h2>
+        <div class="nav-links">
+            <a href="./Index .html">Home</a>
+            <a href="./dashboard.html">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="form-box">
+        <div class="form-header">
+            <h2 id="formTitle">Create New Blog</h2>
+            <p>Share your story with the world</p>
+        </div>
+
+        <p class="success" id="successMsg">Blog published successfully!</p>
+
+        <form id="blogForm">
+
+            <label for="title">Blog Title</label>
+            <input type="text" id="title" placeholder="Enter blog title">
+            <p class="error" id="titleError">Please enter a title</p>
+
+            <label for="category">Category</label>
+            <select id="category">
+                <option value="">-- Select Category --</option>
+                <option value="Technology">Technology</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Education">Education</option>
+                <option value="Travel">Travel</option>
+            </select>
+            <p class="error" id="categoryError">Please select a category</p>
+
+            <label for="content">Blog Content</label>
+            <textarea id="content" placeholder="Write your blog content here..."></textarea>
+            <p class="error" id="contentError">Please write some content (at least 20 characters)</p>
+
+            <button type="submit" id="submitBtn">Publish Blog</button>
+
+        </form>
+    </div>
+
+<script>
+    var params = new URLSearchParams(window.location.search);
+var editId = params.get("id");
+
+if (editId) {
+    document.querySelector(".form-box h2").textContent = "Edit Blog";
+    fetch("http://localhost:5000/api/blog/" + editId)
+        .then(res => res.json())
+        .then(blog => {
+            title.value = blog.title;
+            content.value = blog.content;
+        })
+        .catch(err => console.log(err));
+}
+    var form = document.getElementById("blogForm");
+    var title = document.getElementById("title");
+    var category = document.getElementById("category");
+    var content = document.getElementById("content");
+
+    var titleError = document.getElementById("titleError");
+    var categoryError = document.getElementById("categoryError");
+    var contentError = document.getElementById("contentError");
+    var successMsg = document.getElementById("successMsg");
+    var formTitle = document.getElementById("formTitle");
+    var submitBtn = document.getElementById("submitBtn");
+
+    var params = new URLSearchParams(window.location.search);
+    var blogId = params.get("id");
+
+    if (blogId) {
+        formTitle.textContent = "Edit Blog";
+        submitBtn.textContent = "Update Blog";
+
+        fetch("http://localhost:5000/api/blog/" + blogId)
+            .then(response => response.json())
+            .then(blog => {
+                title.value = blog.title;
+                content.value = blog.content;
+            })
+            .catch(err => {
+                alert("Cannot update the blog.");
+                console.log(err);
+            });
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var isValid = true;
+
+        if (title.value.trim() === "") {
+            titleError.style.display = "block";
+            isValid = false;
+        } else {
+            titleError.style.display = "none";
+        }
+
+        if (category.value === "") {
+            categoryError.style.display = "block";
+            isValid = false;
+        } else {
+            categoryError.style.display = "none";
+        }
+
+        if (content.value.trim().length < 20) {
+            contentError.style.display = "block";
+            isValid = false;
+        } else {
+            contentError.style.display = "none";
+        }
+
+        if (isValid) {
+            var user = JSON.parse(localStorage.getItem("user"));
+            var authorName = user ? user.name : "Unknown";
+
+            if (blogId) {
+                fetch("http://localhost:5000/api/blog/" + blogId, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: title.value,
+                        content: content.value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successMsg.textContent = "Blog updated successfully!";
+                    successMsg.style.display = "block";
+                    setTimeout(function () {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                })
+                .catch(err => {
+                    alert("Cannot update the blog.");
+                    console.log(err);
+                });
+
+            } else {
+                fetch("http://localhost:5000/api/blog", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: title.value,
+                        content: content.value,
+                        author: authorName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successMsg.textContent = "Blog published successfully!";
+                    successMsg.style.display = "block";
+                    setTimeout(function () {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                })
+                .catch(err => {
+                    alert("Server se connect nahi ho saka. Check karo backend chal raha hai.");
+                    console.log(err);
+                });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

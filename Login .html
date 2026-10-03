@@ -100,6 +100,51 @@
         }
     }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Poppins', sans-serif !important;
+        background:
+            linear-gradient(rgba(60,10,35,0.72), rgba(60,10,35,0.72)),
+            url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=70") center/cover fixed,
+            #5c1739 !important;
+        min-height: 100vh;
+    }
+
+    .navbar {
+        background: rgba(60,10,35,0.55) !important;
+    }
+
+    .navbar h2, h1, h2 {
+        font-family: 'Playfair Display', serif !important;
+    }
+
+    .register-box, .login-box, .form-box {
+        background-color: rgba(255,255,255,0.96) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 12px 34px rgba(0,0,0,0.35) !important;
+    }
+
+    input {
+        font-family: 'Poppins', sans-serif !important;
+        border: 1.5px solid #e6d5de !important;
+        border-radius: 10px !important;
+        padding: 11px 14px !important;
+    }
+
+    input:focus {
+        outline: none !important;
+        border-color: #7a1f4b !important;
+        box-shadow: 0 0 0 3px rgba(122,31,75,0.15) !important;
+    }
+
+    button {
+        font-family: 'Poppins', sans-serif !important;
+        background: linear-gradient(90deg, #7a1f4b, #5c1739) !important;
+        border-radius: 30px !important;
+        font-weight: 600 !important;
+    }
+</style>
 </head>
 <body>
 
@@ -164,15 +209,35 @@
             isValid = false;
         }
 
-        // If everything is correct, show success message
-        if (isValid) {
-            successMsg.style.display = "block";
+        // If everything is correct, send data to backend
+if (isValid) {
+    fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            email: email.value,
+            password: password.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "Login successful!") {
+            
+            localStorage.setItem("user", JSON.stringify(data.user));
 
-            // Go to dashboard page after 1 second
+            successMsg.style.display = "block";
             setTimeout(function () {
                 window.location.href = "dashboard.html";
             }, 1000);
+        } else {
+            alert(data.message); 
         }
+    })
+    .catch(err => {
+        alert("Not connect to the server first check backend is perform work or not.");
+        console.log(err);
+    });
+}
     });
 </script>
 

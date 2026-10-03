@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Details - BlogSpace</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f3f4;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #7a1f4b, #5c1739);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 { color: white; margin: 0; font-family: Georgia, serif; }
+
+        .navbar a { color: white; text-decoration: none; font-size: 15px; }
+
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .detail-img { width: 100%; height: 320px; object-fit: cover; }
+
+        .detail-body { padding: 30px; }
+
+        .detail-body h1 { color: #7a1f4b; font-family: Georgia, serif; margin: 0 0 8px 0; }
+
+        .detail-body .meta { color: #999; font-size: 13px; margin-bottom: 20px; }
+
+        .detail-body .content { color: #333; line-height: 1.7; font-size: 15px; white-space: pre-wrap; }
+
+        .action-bar {
+            padding: 20px 30px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .action-bar button, .action-bar a {
+            background-color: #7a1f4b;
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 3px 6px rgba(122, 31, 75, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .action-bar button:hover, .action-bar a:hover {
+            background-color: #5c1739;
+            transform: translateY(-3px) scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>BlogSpace</h2>
+        <a href="dashboard.html">Back to Dashboard</a>
+    </div>
+
+    <div class="container" id="blogContainer">
+        <p style="padding: 30px;">Loading blog...</p>
+    </div>
+
+    <script>
+        var params = new URLSearchParams(window.location.search);
+        var blogId = params.get("id");
+
+        var defaultImages = [
+            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=900&q=70",
+            "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=70",
+            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=70"
+        ];
+
+        if (!blogId) {
+            document.getElementById("blogContainer").innerHTML = "<p style='padding:30px;'>No blog selected.</p>";
+        } else {
+            fetch("http://localhost:5000/api/blog/" + blogId)
+                .then(res => res.json())
+                .then(blog => {
+                    var date = new Date(blog.createdAt).toDateString();
+                    var imgSrc = blog.imageUrl && blog.imageUrl.trim() !== ""
+                        ? blog.imageUrl
+                        : defaultImages[0];
+
+                    var container = document.getElementById("blogContainer");
+                    container.innerHTML = `
+                        <img class="detail-img" src="${imgSrc}" alt="${blog.title}">
+                        <div class="detail-body">
+                            <h1>${blog.title}</h1>
+                            <div class="meta">By ${blog.author} - Published on ${date}</div>
+                            <div class="content">${blog.content}</div>
+                        </div>
+                        <div class="action-bar">
+                            <a href="edit blog.html?id=${blogId}">Edit</a>
+                            <button id="deleteBtn">Delete</button>
+                            <button id="downloadBtn">Download</button>
+                        </div>
+                    `;
+
+                    document.getElementById("deleteBtn").addEventListener("click", function () {
+                        if (!confirm("Are you sure you want to delete this blog?")) return;
+                        fetch("http://localhost:5000/api/blog/" + blogId, { method: "DELETE" })
+                            .then(res => res.json())
+                            .then(data => {
+                                alert(data.message);
+                                window.location.href = "dashboard.html";
+                            })
+                            .catch(err => alert("Could not delete the blog."));
+                    });
+
+                    document.getElementById("downloadBtn").addEventListener("click", function () {
+                        var text = "Title: " + blog.title + "\nAuthor: " + blog.author + "\n\n" + blog.content;
+                        var blobFile = new Blob([text], { type: "text/plain" });
+                        var link = document.createElement("a");
+                        link.href = URL.createObjectURL(blobFile);
+                        link.download = blog.title.replace(/[^a-z0-9]/gi, "_") + ".txt";
+                        link.click();
+                    });
+                })
+                .catch(err => {
+                    document.getElementById("blogContainer").innerHTML = "<p style='padding:30px;'>Blog could not be loaded.</p>";
+                    console.log(err);
+                });
+        }
+    </script>
+
+</body>
+</html>
