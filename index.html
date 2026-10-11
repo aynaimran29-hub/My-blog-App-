@@ -219,15 +219,15 @@
     <div class="navbar">
         <h2>✍ BlogSpace</h2>
         <div class="nav-links">
-            <a href="./Dashboard.html">Dashboard</a>
-            <a href="./create  blog.html">New Blog</a>
+            <a href="./dashboard.html">Dashboard</a>
+            <a href="./create-blog.html">New Blog</a>
         </div>
     </div>
 
     <div class="hero">
         <h1>Welcome to BlogSpace</h1>
         <p>Read blogs, share your thoughts, and connect with other writers.</p>
-        <a href="./create  blog.html">Start Writing</a>
+        <a href="./create-blog.html">Start Writing</a>
     </div>
 
     <h2 class="section-title">Latest Stories</h2>
@@ -239,14 +239,15 @@
         &copy; 2026 BlogSpace. All rights reserved.
     </footer>
 
-    <script>
+    <script src="config.js"></script>
+<script>
         function esc(text) {
             var div = document.createElement("div");
             div.textContent = text;
             return div.innerHTML;
         }
 
-        fetch("http://localhost:5000/api/blog")
+        fetch(API_URL + "/api/blog")
             .then(res => res.json())
             .then(blogs => {
                 var container = document.getElementById("blogContainer");
@@ -272,7 +273,7 @@
                                 </div>
                                 <h3>${esc(blog.title)}</h3>
                                 <p>${esc(shortText)}</p>
-                                <a class="read-more" href="blog -detail.html?id=${blog._id}">Read more &rarr;</a>
+                                <a class="read-more" href="blog-detail.html?id=${blog._id}">Read more &rarr;</a>
                             </div>
                         </div>
                     `;

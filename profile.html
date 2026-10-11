@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - BlogSpace</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f3f4;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #7a1f4b, #5c1739);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .navbar h2 { color: white; margin: 0; font-family: Georgia, serif; }
+        .navbar .nav-links { display: flex; align-items: center; }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 15px;
+            transition: 0.25s;
+        }
+
+        .navbar .nav-links a:hover { color: #f6c9dd; }
+
+        .logout-btn {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.55);
+            padding: 7px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 22px;
+            transition: 0.25s;
+        }
+
+        .logout-btn:hover { background-color: white; color: #7a1f4b; transform: translateY(-2px); }
+
+        .hero {
+            padding: 50px 30px 90px 30px;
+            background-image:
+                linear-gradient(135deg, rgba(122,31,75,0.88), rgba(92,23,57,0.88), rgba(61,15,40,0.92)),
+                url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero h1 { color: white; font-family: Georgia, serif; font-size: 34px; margin: 0 0 8px 0; }
+        .hero p { color: #f3d9e6; font-size: 15px; margin: 0; }
+
+        .profile-card {
+            max-width: 600px;
+            margin: -50px auto 40px auto;
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: cardIn 0.7s cubic-bezier(.2,.8,.2,1) backwards;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: perspective(900px) rotateX(25deg) translateY(30px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 14px auto;
+            background: linear-gradient(135deg, #7a1f4b, #5c1739);
+            color: white;
+            font-size: 40px;
+            font-family: Georgia, serif;
+            box-shadow: 0 6px 16px rgba(122,31,75,0.4);
+        }
+
+        .profile-card h2 { margin: 0 0 4px 0; color: #7a1f4b; font-family: Georgia, serif; }
+        .email { color: #777; font-size: 14px; margin: 0 0 22px 0; }
+
+        .stats {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            flex: 1;
+            min-width: 140px;
+            background: #faf3f7;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .stat strong { display: block; font-size: 24px; color: #7a1f4b; font-family: Georgia, serif; }
+        .stat span { font-size: 13px; color: #777; }
+
+        .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        .btn-row a, .btn-row button {
+            background-color: #7a1f4b;
+            color: white;
+            border: none;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 10px 24px;
+            border-radius: 22px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(122,31,75,0.35);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-row a:hover, .btn-row button:hover { background-color: #5c1739; transform: translateY(-2px); }
+        .btn-row .btn-out { background-color: #eee; color: #444; box-shadow: none; }
+        .btn-row .btn-out:hover { background-color: #ddd; }
+
+        @media (max-width: 500px) { .navbar { flex-direction: column; text-align: center; } }
+        @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01s !important; } }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>BlogSpace</h2>
+        <div class="nav-links">
+            <a href="./index.html">Home</a>
+            <a href="./dashboard.html">Dashboard</a>
+            <a href="./create-blog.html">New Blog</a>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>My Profile</h1>
+        <p>Your account details.</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="avatar" id="avatar">?</div>
+        <h2 id="pName">Loading...</h2>
+        <p class="email" id="pEmail"></p>
+
+        <div class="stats">
+            <div class="stat"><strong id="blogCount">-</strong><span>Total blogs</span></div>
+            <div class="stat"><strong id="joined">-</strong><span>Member since</span></div>
+        </div>
+
+        <div class="btn-row">
+            <a href="./dashboard.html">Go to Dashboard</a>
+            <button class="btn-out" id="logoutBtn2">Logout</button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+<script>
+        var token = localStorage.getItem("token");
+
+        function forceLogout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+        }
+
+        function askLogout() {
+            if (confirm("Are you sure you want to logout?")) forceLogout();
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", askLogout);
+        document.getElementById("logoutBtn2").addEventListener("click", askLogout);
+
+        if (!token) {
+            forceLogout();
+        } else {
+            var headers = { "Authorization": "Bearer " + token };
+
+            // User ki info server se
+            fetch(API_URL + "/api/me", { headers: headers })
+                .then(function (res) {
+                    if (res.status === 401) { forceLogout(); throw new Error("unauthorized"); }
+                    return res.json();
+                })
+                .then(function (u) {
+                    document.getElementById("pName").textContent = u.name || "User";
+                    document.getElementById("pEmail").textContent = u.email || "";
+                    document.getElementById("avatar").textContent = (u.name || "?").charAt(0).toUpperCase();
+                    if (u.createdAt) {
+                        document.getElementById("joined").textContent =
+                            new Date(u.createdAt).toLocaleDateString(undefined, { month: "short", year: "numeric" });
+                    }
+                })
+                .catch(function (err) {
+                    if (err.message === "unauthorized") return;
+                    console.log(err);
+                    document.getElementById("pName").textContent = "Could not load profile";
+                });
+
+            // Blogs ki ginti
+            fetch(API_URL + "/api/blog/my", { headers: headers })
+                .then(function (res) { return res.json(); })
+                .then(function (blogs) {
+                    document.getElementById("blogCount").textContent = Array.isArray(blogs) ? blogs.length : 0;
+                })
+                .catch(function (err) { console.log(err); });
+        }
+    </script>
+
+</body>
+</html>

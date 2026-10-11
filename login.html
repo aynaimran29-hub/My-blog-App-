@@ -178,6 +178,7 @@
         </p>
     </div>
 
+<script src="config.js"></script>
 <script>
     // Get form and input elements
     var form = document.getElementById("loginForm");
@@ -210,34 +211,36 @@
         }
 
         // If everything is correct, send data to backend
-if (isValid) {
-    fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            email: email.value,
-            password: password.value
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message === "Login successful!") {
-            
-            localStorage.setItem("user", JSON.stringify(data.user));
+        if (isValid) {
+            fetch(API_URL + "/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Login successful!") {
 
-            successMsg.style.display = "block";
-            setTimeout(function () {
-                window.location.href = "dashboard.html";
-            }, 1000);
-        } else {
-            alert(data.message); 
+                    // ===== STEP 6: token aur user dono save karna =====
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+
+                    successMsg.style.display = "block";
+                    setTimeout(function () {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(err => {
+                alert("Not connect to the server first check backend is perform work or not.");
+                console.log(err);
+            });
         }
-    })
-    .catch(err => {
-        alert("Not connect to the server first check backend is perform work or not.");
-        console.log(err);
-    });
-}
     });
 </script>
 

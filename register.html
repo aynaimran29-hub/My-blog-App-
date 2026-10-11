@@ -5,192 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Register Page</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-    /* Basic page setup */
+    * { box-sizing: border-box; }
+
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
-        margin: 10;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
         padding: 0;
+        min-height: 100vh;
+        background:
+            linear-gradient(rgba(60,10,35,0.72), rgba(60,10,35,0.72)),
+            url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=70") center/cover fixed,
+            #5c1739;
     }
 
-    /* Simple navbar */
     .navbar {
-        background-color: #7a1f4b;
-        padding: 10px;
+        background: rgba(60,10,35,0.55);
+        padding: 14px;
         text-align: center;
     }
 
     .navbar h2 {
+        font-family: 'Playfair Display', serif;
         color: white;
-        margin: 5;
+        margin: 0;
     }
 
-    /* Register box in the center */
-    .Register-box {
-        background-color: white;
-        width: 420px;
-        margin: 50px auto;
-        padding: 20px;
-        border: 10px solid #ccc;
-        border-radius: 5px;
+    .register-box {
+        background-color: rgba(255,255,255,0.96);
+        width: 90%;
+        max-width: 420px;
+        margin: 40px auto;
+        padding: 26px;
+        border-radius: 16px;
+        box-shadow: 0 12px 34px rgba(0,0,0,0.35);
     }
 
-    .Register-box h2 {
+    .register-box h2 {
+        font-family: 'Playfair Display', serif;
         text-align: center;
         color: #7a1f4b;
+        margin-top: 0;
     }
 
-    /* Form styling */
     label {
         display: block;
-        margin-top: 10px;
+        margin-top: 12px;
         margin-bottom: 5px;
-        font-weight: bold;
+        font-weight: 600;
+        font-size: 14px;
     }
 
     input {
         width: 100%;
-        padding: 6px;
-        border: 100px solid #ccc;
-        border-radius: 4px;
+        font-family: 'Poppins', sans-serif;
+        border: 1px solid #e6d5de;
+        border-radius: 10px;
+        padding: 11px 14px;
+        font-size: 14px;
     }
 
-    /* Error text */
+    input:focus {
+        outline: none;
+        border-color: #7a1f4b;
+        box-shadow: 0 0 0 3px rgba(122,31,75,0.15);
+    }
+
     .error {
         color: red;
         font-size: 13px;
+        margin: 4px 0 0 0;
         display: none;
     }
 
-    /* Register button */
     button {
         width: 100%;
-        padding: 10px;
-        margin-top: 2px;
-        background-color: #7a1f4b;
+        margin-top: 20px;
+        padding: 11px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 15px;
         color: white;
         border: none;
-        border-radius: 2px;
+        border-radius: 20px;
         cursor: pointer;
+        background: linear-gradient(90deg, #7a1f4b, #5c1739);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
 
     button:hover {
-        background-color: #5c1739;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(122,31,75,0.35);
     }
 
-    /* Login link */
-    .login-text {
-        text-align: center;
-        margin-top: 10px;
-    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* Success message */
+    .login-text { text-align: center; margin-top: 14px; font-size: 14px; }
+    .login-text a { color: #7a1f4b; font-weight: 600; }
+
     .success {
         color: green;
         text-align: center;
         display: none;
-        margin-top: 15px;
-    }
-
-    /* Make it responsive on small screens */
-    @media (max-width: 400px) {
-        .Register-box {
-            width: 90%;
-        }
-    }
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Poppins', sans-serif !important;
-        background:
-            linear-gradient(rgba(60,10,35,0.72), rgba(60,10,35,0.72)),
-            url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=70") center/cover fixed,
-            #5c1739 !important;
-        min-height: 100vh;
-    }
-
-    .navbar {
-        background: rgba(60,10,35,0.55) !important;
-    }
-
-    .navbar h2, h1, h2 {
-        font-family: 'Playfair Display', serif !important;
-    }
-
-    .register-box, .login-box, .form-box {
-        background-color: rgba(255,255,255,0.96) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 12px 34px rgba(0,0,0,0.35) !important;
-    }
-
-    input {
-        font-family: 'Poppins', sans-serif !important;
-        border: 1px solid #e6d5de !important;
-        border-radius: 10px !important;
-        padding: 11px 14px !important;
-    }
-
-    input:focus {
-        outline: none !important;
-        border-color: #7a1f4b !important;
-        box-shadow: 0 0 0 3px rgba(122,31,75,0.15) !important;
-    }
-
-    button {
-        font-family: 'Poppins', sans-serif !important;
-        background: linear-gradient(90deg, #7a1f4b, #5c1739) !important;
-        border-radius: 20px !important;
-        font-weight: 600 !important;
+        margin-top: 12px;
     }
 </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <div class="navbar">
         <h2>BlogSpace</h2>
     </div>
 
-    <!-- Register Form -->
-    <div class="Register-box">
+    <div class="register-box">
         <h2>Register</h2>
 
         <p class="success" id="successMsg">Account created successfully!</p>
 
-
         <form id="RegisterForm">
 
-            <label for="name"> name</label>
+            <label for="name">Name</label>
             <input type="text" id="name" placeholder="Enter your name">
             <p class="error" id="nameError">Please enter your name</p>
 
-            <label for="email">email</label>
+            <label for="email">Email</label>
             <input type="email" id="email" placeholder="Enter your email">
             <p class="error" id="emailError">Please enter a valid email</p>
 
-            <label for="password">password</label>
+            <label for="password">Password</label>
             <input type="password" id="password" placeholder="Create a password">
             <p class="error" id="passwordError">Password must be at least 6 characters</p>
 
-            <label for="confirmPassword">ConfirmPassword</label>
+            <label for="confirmPassword">Confirm Password</label>
             <input type="password" id="confirmPassword" placeholder="Re-enter your password">
             <p class="error" id="confirmError">Passwords do not match</p>
 
-            <button type="Register">Submit</button>
-        
+            <button type="submit" id="registerBtn">Register</button>
 
         </form>
 
         <p class="login-text">
-            Already have an account? <a href="./Login .html">Login here</a>
+            Already have an account? <a href="./login.html">Login here</a>
         </p>
-    
     </div>
 
+<script src="config.js"></script>
 <script>
-    // Get form and input elements
     var form = document.getElementById("RegisterForm");
     var nameInput = document.getElementById("name");
     var email = document.getElementById("email");
@@ -201,16 +163,14 @@
     var emailError = document.getElementById("emailError");
     var passwordError = document.getElementById("passwordError");
     var confirmError = document.getElementById("confirmError");
-    var successMsg=document.getElementById("successMsg")
+    var successMsg = document.getElementById("successMsg");
+    var registerBtn = document.getElementById("registerBtn");
 
-
-    // Run this when the form is submitted
     form.addEventListener("submit", function (e) {
-        e.preventDefault(); // stop the form from refreshing the page
+        e.preventDefault();
 
         var isValid = true;
 
-        // Check name is not empty
         if (nameInput.value.trim() === "") {
             nameError.style.display = "block";
             isValid = false;
@@ -218,7 +178,6 @@
             nameError.style.display = "none";
         }
 
-        // Check email contains @ and .
         if (email.value.includes("@") && email.value.includes(".")) {
             emailError.style.display = "none";
         } else {
@@ -226,7 +185,6 @@
             isValid = false;
         }
 
-        // Check password length
         if (password.value.length >= 6) {
             passwordError.style.display = "none";
         } else {
@@ -234,7 +192,6 @@
             isValid = false;
         }
 
-        // Check password and confirm password match
         if (confirmPassword.value === password.value && confirmPassword.value !== "") {
             confirmError.style.display = "none";
         } else {
@@ -242,33 +199,39 @@
             isValid = false;
         }
 
-        // If everything is correct, send data to backend
-if (isValid) {
-    fetch("http://localhost:5000/api/Register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name: nameInput.value,
-            email: email.value,
-            password: password.value
+        if (!isValid) return;
+
+        registerBtn.disabled = true;
+        registerBtn.textContent = "Please wait...";
+
+        fetch(API_URL + "/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: nameInput.value.trim(),
+                email: email.value.trim(),
+                password: password.value
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message === "Registration successful!") {
-            successMsg.style.display = "block";
-            setTimeout(function () {
-                window.location.href ="./Login .html"
-            }, 1000);
-        } else {
-            alert(data.message); 
-        }
-    })
-    .catch(err => {
-        alert("NOT Connect the server first check this backend is perform work or not.");
-        console.log(err);
-    });
-}
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            if (data.message === "Registration successful!") {
+                successMsg.style.display = "block";
+                setTimeout(function () {
+                    window.location.href = "./login.html";
+                }, 1000);
+            } else {
+                alert(data.message);
+                registerBtn.disabled = false;
+                registerBtn.textContent = "Register";
+            }
+        })
+        .catch(function (err) {
+            alert("Could not connect to the server. Check that the backend is running.");
+            console.log(err);
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Register";
+        });
     });
 </script>
 

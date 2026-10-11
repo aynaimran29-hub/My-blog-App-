@@ -158,6 +158,12 @@
         box-shadow: 0 8px 18px rgba(122,31,75,0.35);
     }
 
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
     .success {
         color: #228b22;
         background: #e0f3e0;
@@ -182,8 +188,9 @@
     <div class="navbar">
         <h2>✍ BlogSpace</h2>
         <div class="nav-links">
-            <a href="./Index .html">Home</a>
+            <a href="./index.html">Home</a>
             <a href="./dashboard.html">Dashboard</a>
+            <a href="./profile.html">Profile</a>
         </div>
     </div>
 
@@ -220,20 +227,30 @@
         </form>
     </div>
 
+<script src="config.js"></script>
 <script>
-    var params = new URLSearchParams(window.location.search);
-var editId = params.get("id");
+    // ===== Login check: token aur user zaroori hain =====
+    var token = localStorage.getItem("token");
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem("user")); } catch (e) { user = null; }
 
-if (editId) {
-    document.querySelector(".form-box h2").textContent = "Edit Blog";
-    fetch("http://localhost:5000/api/blog/" + editId)
-        .then(res => res.json())
-        .then(blog => {
-            title.value = blog.title;
-            content.value = blog.content;
-        })
-        .catch(err => console.log(err));
-}
+    function forceLogout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+    }
+
+    if (!token || !user) {
+        forceLogout();
+    }
+
+    function authHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        };
+    }
+
     var form = document.getElementById("blogForm");
     var title = document.getElementById("title");
     var category = document.getElementById("category");
@@ -246,6 +263,7 @@ if (editId) {
     var formTitle = document.getElementById("formTitle");
     var submitBtn = document.getElementById("submitBtn");
 
+    // ?id=... ho to edit mode
     var params = new URLSearchParams(window.location.search);
     var blogId = params.get("id");
 
@@ -253,14 +271,14 @@ if (editId) {
         formTitle.textContent = "Edit Blog";
         submitBtn.textContent = "Update Blog";
 
-        fetch("http://localhost:5000/api/blog/" + blogId)
-            .then(response => response.json())
-            .then(blog => {
-                title.value = blog.title;
-                content.value = blog.content;
+        fetch(API_URL + "/api/blog/" + blogId)
+            .then(function (response) { return response.json(); })
+            .then(function (blog) {
+                title.value = blog.title || "";
+                content.value = blog.content || "";
             })
-            .catch(err => {
-                alert("Cannot update the blog.");
+            .catch(function (err) {
+                alert("Could not load the blog.");
                 console.log(err);
             });
     }
@@ -277,7 +295,8 @@ if (editId) {
             titleError.style.display = "none";
         }
 
-        if (category.value === "") {
+        // Edit mode ma category zaroori nahi (server category save nahi karta)
+        if (!blogId && category.value === "") {
             categoryError.style.display = "block";
             isValid = false;
         } else {
@@ -291,56 +310,49 @@ if (editId) {
             contentError.style.display = "none";
         }
 
-        if (isValid) {
-            var user = JSON.parse(localStorage.getItem("user"));
-            var authorName = user ? user.name : "Unknown";
+        if (!isValid) return;
 
-            if (blogId) {
-                fetch("http://localhost:5000/api/blog/" + blogId, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        title: title.value,
-                        content: content.value
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    successMsg.textContent = "Blog updated successfully!";
-                    successMsg.style.display = "block";
-                    setTimeout(function () {
-                        window.location.href = "dashboard.html";
-                    }, 1000);
-                })
-                .catch(err => {
-                    alert("Cannot update the blog.");
-                    console.log(err);
-                });
+        var url = blogId
+            ? API_URL + "/api/blog/" + blogId
+            : API_URL + "/api/blog";
 
-            } else {
-                fetch("http://localhost:5000/api/blog", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        title: title.value,
-                        content: content.value,
-                        author: authorName
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    successMsg.textContent = "Blog published successfully!";
-                    successMsg.style.display = "block";
-                    setTimeout(function () {
-                        window.location.href = "dashboard.html";
-                    }, 1000);
-                })
-                .catch(err => {
-                    alert("Server se connect nahi ho saka. Check karo backend chal raha hai.");
-                    console.log(err);
-                });
+        var body = blogId
+            ? { title: title.value.trim(), content: content.value.trim() }
+            : { title: title.value.trim(), content: content.value.trim(), author: user.name };
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = blogId ? "Updating..." : "Publishing...";
+
+        fetch(url, {
+            method: blogId ? "PUT" : "POST",
+            headers: authHeaders(),
+            body: JSON.stringify(body)
+        })
+        .then(function (response) {
+            if (response.status === 401) {
+                alert("Session expired. Please login again.");
+                forceLogout();
+                throw new Error("unauthorized");
             }
-        }
+            if (!response.ok) {
+                throw new Error("Server error " + response.status);
+            }
+            return response.json();
+        })
+        .then(function () {
+            successMsg.textContent = blogId ? "Blog updated successfully!" : "Blog published successfully!";
+            successMsg.style.display = "block";
+            setTimeout(function () {
+                window.location.href = "dashboard.html";
+            }, 1000);
+        })
+        .catch(function (err) {
+            if (err.message === "unauthorized") return;
+            alert("Could not save the blog. Check that the backend is running.");
+            console.log(err);
+            submitBtn.disabled = false;
+            submitBtn.textContent = blogId ? "Update Blog" : "Publish Blog";
+        });
     });
 </script>
 
