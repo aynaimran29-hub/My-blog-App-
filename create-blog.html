@@ -229,7 +229,7 @@
 
 <script src="config.js"></script>
 <script>
-    // ===== Login check: token aur user zaroori hain =====
+    
     var token = localStorage.getItem("token");
     var user = null;
     try { user = JSON.parse(localStorage.getItem("user")); } catch (e) { user = null; }
@@ -295,7 +295,7 @@
             titleError.style.display = "none";
         }
 
-        // Edit mode ma category zaroori nahi (server category save nahi karta)
+        
         if (!blogId && category.value === "") {
             categoryError.style.display = "block";
             isValid = false;

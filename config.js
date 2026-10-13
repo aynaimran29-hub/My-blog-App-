@@ -1,2 +1,1 @@
-// Sirf yahan API ka address badlen
-var API_URL = "http://localhost:5000";
+   var API_URL = "https://my-blog-app-backend-tasks.vercel.app";

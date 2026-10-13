@@ -84,7 +84,7 @@
 
         body.ready .hero h1 { visibility: visible; }
 
-        /* Har lafz narmi se upar uthta hai (sirf ek baar) */
+        
         .hero h1 .word {
             display: inline-block;
             opacity: 0;
@@ -101,7 +101,7 @@
             to { opacity: 1; transform: none; filter: blur(0); }
         }
 
-        /* Neeche gulabi line ek baar khinchti hai */
+        
         .hero h1::after {
             content: "";
             display: block;
@@ -532,7 +532,7 @@
 
     <script src="config.js"></script>
 <script>
-        // ===== Login check: token aur user dono zaroori hain =====
+        
         var token = localStorage.getItem("token");
         var user = null;
         try { user = JSON.parse(localStorage.getItem("user")); } catch (e) { user = null; }
@@ -595,7 +595,7 @@
             setTimeout(function () { t.classList.remove("show"); }, 2500);
         }
 
-        // ===== Load blogs: sirf logged-in user ke apne blogs =====
+
         function loadBlogs(updatedId) {
             fetch(API_URL + "/api/blog/my", { headers: authHeaders(false) })
                 .then(function (response) {
